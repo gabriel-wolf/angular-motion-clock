@@ -1,10 +1,12 @@
 from __future__ import division
-from tkinter import Tk, Canvas
+from tkinter import Tk, Canvas, Label
+from tkinter import *
 from math import sin, cos, radians, degrees
 from datetime import datetime
 from datetime import time, date
 import time
 from time import *
+
 
 from sympy import sin, cos, tan, asin, acos, atan, symbols, solve, sympify, pprint, pretty
 from sympy import pi, Eq, Function, exp, simplify, solveset, S
@@ -21,6 +23,11 @@ init_printing()
 
 # import colorama for green red coloring 
 from colorama import Fore, Back, Style 
+
+
+def retPrint(self):
+    print("RETPRINT")
+    
 
 # store xy pairs for points
 class point():
@@ -58,11 +65,13 @@ class hands():
     # release tkinter!
     root = Tk()
 
+
+    
     # hand id strings
     longHand = ""
     shortHand = ""
     secondHand = ""
-
+    
     # circle clock corners
     corner1 = point(10, 10)
     corner2 = point(210, 210)
@@ -78,6 +87,30 @@ class hands():
     def updateClock(self, canvas, startTime, pEllapsedTime):
         from datetime import datetime
         
+        # init setup tkinter text labels
+        self.v = StringVar()
+        self.secwv = StringVar()
+        self.minwv = StringVar()
+        self.hrswv = StringVar()
+        # time label
+        vwid = Label(canvas, textvariable = self.v, fg='black')
+        vwid.pack()
+        # sec label
+        secwid = Label(canvas, textvariable = self.secwv, fg='black')
+        secwid.pack()
+        # min label
+        minwid = Label(canvas, textvariable = self.minwv, fg='black')
+        minwid.pack()
+        # hour label
+        hrswid = Label(canvas, textvariable = self.hrswv, fg='black')
+        hrswid.pack()
+        # create widgets
+        canvas.create_window(110, 250, window=vwid)   
+        canvas.create_window(110, 270, window=secwid)
+        canvas.create_window(110, 290, window=minwid)
+        canvas.create_window(110, 310, window=hrswid)
+
+
         
         # init clock hand
         def initHand(hand, color, width):
@@ -125,7 +158,7 @@ class hands():
         def drawHand(Hand, angle, length):
             # offset by 90 deg so 0 at top
             angle -= 90.0
-            
+
             rads = radians(angle)
             center = self.centerPoint()
             endPoint = center.offsetByVector(rads, length)
@@ -135,9 +168,6 @@ class hands():
         drawHand(shortHand, minuteAngle, 80)
         drawHand(secHand, secondAngle, 90)
 
-        
-        # wait 100 mili then recall
-        rotate = lambda: self.updateClock(canvas, startTime, pEllapsedTime)
 
 
         # time printing stuff
@@ -148,49 +178,115 @@ class hands():
 
         printEllapTime = False
 
+        if printEllapTime:
+            print(ellapsedTime)
+            print(pEllapsedTime)
+            print("\n")
 
-        
+
+        showPrint = False
+
         # if time change is not less than a second
-        if (ellapsedTime != pEllapsedTime):
-            if (printEllapTime == True):
-                print(ellapsedTime)
-
+        # hour = 50 minute = 80 second = 90
+        if showPrint:
+        # if (int(ellapsedTime) == int(pEllapsedTime)):
+            
             ellapsedMin = ellapsedTime/60
             ellapsedHour = ellapsedTime/3600
             
-            print(str(utime.hour) + ":" + str(utime.minute) + ":" + str(utime.second))
+            print("Ellapsed seconds: " + Fore.BLUE + str(ellapsedTime) + Style.RESET_ALL + "  " + str(utime.hour) + ":" + str(utime.minute) + ":" + str(utime.second))
+            # angular velocity
             solsec = (((pi/30)*(int(ellapsedTime))))
             solmin = ((2*pi/3600)*(int(ellapsedTime)))
             solhrs = ((2*pi/43200)*(int(ellapsedTime)))
+            # linear velocity v=w*r (r = hand length)
+            vsolsec = 90*solsec
+            vsolmin = 80*solmin
+            vsolhrs = 50*solhrs
+
+            printDeg = False
             
-            print("Seconds\nw = " + str(solsec) + " rad.s")
-            print("  = " + str(round(solsec.evalf(),4)) + " rad")
-            print("  = " + str(round(degrees(solsec.evalf()),4)) + " deg\n")
-            print("Minutes\nw = " + str(solmin) + " rad.m")
-            print("  = " + str(round(solmin.evalf(),4)) + " rad")
-            print("  = " + str(round(degrees(solmin.evalf()),4)) + " deg\n")
-            print("Hours\nw = " + str(solhrs) + " rad.h")
-            print("  = " + str(round(solhrs.evalf(),4)) + " rad")
-            print("  = " + str(round(degrees(solhrs.evalf()),4)) + " deg\n")
+            # seconds angular
+            print(Fore.WHITE + "Seconds" + Style.RESET_ALL + "\nw = " + str(solsec) + " rad/s")
+            print("  = " + Fore.GREEN + str(round(solsec.evalf(),4)) + " rad/s" + Style.RESET_ALL)
+            if (printDeg):
+                print("  = " + str(round(degrees(solsec.evalf()),4)) + " deg/s")
+            # linear
+            print("v = " + str(vsolsec) + " rad/s")
+            print("  = " + Fore.GREEN + str(round(vsolsec.evalf(),4)) + " m/s\n" + Style.RESET_ALL)
+
+            # minutes angular
+            print(Fore.WHITE + "Minutes" + Style.RESET_ALL + "\nw = " + str(solmin) + " rad/s")
+            print("  = " + Fore.GREEN + str(round(solmin.evalf(),4)) + " rad/s" + Style.RESET_ALL)
+            if (printDeg):
+                print("  = " + str(round(degrees(solmin.evalf()),4)) + " deg/s")
+            # linear
+            print("v = " + str(vsolmin) + " rad/s")
+            print("  = " + Fore.GREEN + str(round(vsolmin.evalf(),4)) + " m/s\n" + Style.RESET_ALL)
+
+            # hours angular
+            print(Fore.WHITE + "Hours" + Style.RESET_ALL + "\nw = " + str(solhrs) + " rad/s")
+            print("  = " + Fore.GREEN + str(round(solhrs.evalf(),4)) + " rad/s" + Style.RESET_ALL)
+            if (printDeg):
+                print("  = " + str(round(degrees(solhrs.evalf()),4)) + " deg/s")
+            # linear
+            print("v = " + str(vsolhrs) + " rad/s")
+            print("  = " + Fore.GREEN + str(round(vsolhrs.evalf(),4)) + " m/s\n" + Style.RESET_ALL)
             print("")
 
+        else:
+            print("", end="")
+
+
+        # all the tkinter text display
+        if True:
+            
+            ellapsedMin = ellapsedTime/60
+            ellapsedHour = ellapsedTime/3600
+
+            # angular velocity
+            solsec = (((pi/30)*(int(ellapsedTime))))
+            solmin = ((2*pi/3600)*(int(ellapsedTime)))
+            solhrs = ((2*pi/43200)*(int(ellapsedTime)))
+            # linear velocity v=w*r (r = hand length)
+            vsolsec = 90*solsec
+            vsolmin = 80*solmin
+            vsolhrs = 50*solhrs
+
+            self.secwv.set("Seconds: w=" + str(round(solsec.evalf(),4)) + " rad/s  v=" + str(round(vsolsec.evalf(),4)) + "m/s")
+            self.minwv.set("Minutes: w=" + str(round(solmin.evalf(),4)) + " rad/s  v=" + str(round(vsolmin.evalf(),4)) + "m/s")
+            self.hrswv.set("Hours: w=" + str(round(solhrs.evalf(),4)) + " rad/s  v=" + str(round(vsolhrs.evalf(),4)) + "m/s")
+            
+            self.v.set("Ellapsed seconds: " + str(ellapsedTime) + "  Time: " + str(utime.hour) + ":" + str(utime.minute) + ":" + str(utime.second))
         
+            
+       # wait 100 mili then recall
+        rotate = lambda: self.updateClock(canvas, startTime, pEllapsedTime)
+
+            
         pEllapsedTime = ellapsedTime
+
+        canvas.after(100, rotate)
         
-        canvas.after(5, rotate)
-        
+
+  
 
 
     def run(self):
+        self.root.bind('<q>', exit)
+        self.root.bind('<Return>', retPrint)
         self.root.mainloop()
 
     def __init__(self):
-        canvas = Canvas(self.root, width=220, height=220)
+        canvas = Canvas(self.root, width=220, height=330)
 
         # get corners
         corner1 = self.corner1
         corner2 = self.corner2
-        
+
+
+       
+
         canvas.create_oval(corner1.x, corner1.y, corner2.x, corner2.y, \
                            fill = "white", width = 3)
         center = self.centerPoint()
@@ -202,7 +298,7 @@ class hands():
         # get start time and save it
         import time
         startTime = int(round(time.time() * 1))
-        
+
     
         # prepare for main loop
         self.updateClock(canvas,startTime,0)
@@ -210,8 +306,10 @@ class hands():
 def main():
     sHand = hands()
     sHand.run()
-   
+
+
 main()
+   
         
 
 
