@@ -176,67 +176,6 @@ class hands():
         currTime = int(round(time.time() * 1))
         ellapsedTime = int(currTime)-int(startTime)
 
-        printEllapTime = False
-
-        if printEllapTime:
-            print(ellapsedTime)
-            print(pEllapsedTime)
-            print("\n")
-
-
-        showPrint = False
-
-        # if time change is not less than a second
-        # hour = 50 minute = 80 second = 90
-        if showPrint:
-        # if (int(ellapsedTime) == int(pEllapsedTime)):
-            
-            ellapsedMin = ellapsedTime/60
-            ellapsedHour = ellapsedTime/3600
-            
-            print("Ellapsed seconds: " + Fore.BLUE + str(ellapsedTime) + Style.RESET_ALL + "  " + str(utime.hour) + ":" + str(utime.minute) + ":" + str(utime.second))
-            # angular velocity
-            solsec = (((pi/30)*(int(ellapsedTime))))
-            solmin = ((2*pi/3600)*(int(ellapsedTime)))
-            solhrs = ((2*pi/43200)*(int(ellapsedTime)))
-            # linear velocity v=w*r (r = hand length)
-            vsolsec = 90*solsec
-            vsolmin = 80*solmin
-            vsolhrs = 50*solhrs
-
-            printDeg = False
-            
-            # seconds angular
-            print(Fore.WHITE + "Seconds" + Style.RESET_ALL + "\nw = " + str(solsec) + " rad/s")
-            print("  = " + Fore.GREEN + str(round(solsec.evalf(),4)) + " rad/s" + Style.RESET_ALL)
-            if (printDeg):
-                print("  = " + str(round(degrees(solsec.evalf()),4)) + " deg/s")
-            # linear
-            print("v = " + str(vsolsec) + " rad/s")
-            print("  = " + Fore.GREEN + str(round(vsolsec.evalf(),4)) + " m/s\n" + Style.RESET_ALL)
-
-            # minutes angular
-            print(Fore.WHITE + "Minutes" + Style.RESET_ALL + "\nw = " + str(solmin) + " rad/s")
-            print("  = " + Fore.GREEN + str(round(solmin.evalf(),4)) + " rad/s" + Style.RESET_ALL)
-            if (printDeg):
-                print("  = " + str(round(degrees(solmin.evalf()),4)) + " deg/s")
-            # linear
-            print("v = " + str(vsolmin) + " rad/s")
-            print("  = " + Fore.GREEN + str(round(vsolmin.evalf(),4)) + " m/s\n" + Style.RESET_ALL)
-
-            # hours angular
-            print(Fore.WHITE + "Hours" + Style.RESET_ALL + "\nw = " + str(solhrs) + " rad/s")
-            print("  = " + Fore.GREEN + str(round(solhrs.evalf(),4)) + " rad/s" + Style.RESET_ALL)
-            if (printDeg):
-                print("  = " + str(round(degrees(solhrs.evalf()),4)) + " deg/s")
-            # linear
-            print("v = " + str(vsolhrs) + " rad/s")
-            print("  = " + Fore.GREEN + str(round(vsolhrs.evalf(),4)) + " m/s\n" + Style.RESET_ALL)
-            print("")
-
-        else:
-            print("", end="")
-
 
         # all the tkinter text display
         if True:
