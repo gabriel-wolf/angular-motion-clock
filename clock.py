@@ -25,10 +25,6 @@ init_printing()
 from colorama import Fore, Back, Style 
 
 
-def retPrint(self):
-    print("RETPRINT")
-    
-
 # store xy pairs for points
 class point():
     x = 0
@@ -65,8 +61,6 @@ class hands():
     # release tkinter!
     root = Tk()
 
-
-    
     # hand id strings
     longHand = ""
     shortHand = ""
@@ -213,7 +207,6 @@ class hands():
 
     def run(self):
         self.root.bind('<q>', exit)
-        self.root.bind('<Return>', retPrint)
         self.root.mainloop()
 
     def __init__(self):
